@@ -89,7 +89,7 @@ export class MicroK8s {
 
   }
 
-  public install() {
+  public async install() {
     console.log(`'install microk8s [channel: ${this.channel}] [strict mode: ${this.isStrictMode}]'`)
     sh.echo("install microk8s [channel: " + this.channel + "] [strict mode: " + this.isStrictMode + "]")
     try {
