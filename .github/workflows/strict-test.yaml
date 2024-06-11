@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     name: A job to install MicroK8s with strict confinement
     steps:
-    - uses: Coalesce-Software-Inc/microk8s-actions@IN-598
+    - uses: Coalesce-Software-Inc/microk8s-actionsmaster
       with:
         channel: "${{ matrix.version }}"
         devMode: "true"

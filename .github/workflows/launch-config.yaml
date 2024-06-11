@@ -18,7 +18,7 @@ jobs:
         docker pull alpine:edge
         docker save alpine:edge > $HOME/sideload/alpine-edge.tar
 
-    - uses: Coalesce-Software-Inc/microk8s-actions@IN-598
+    - uses: Coalesce-Software-Inc/microk8s-actionsmaster
       with:
         channel: "1.28/stable"
         launch-configuration: "$GITHUB_WORKSPACE/microk8s-config.yaml"
