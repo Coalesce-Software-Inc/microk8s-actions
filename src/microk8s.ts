@@ -104,8 +104,10 @@ export class MicroK8s {
           util.executeCommand(false, this.command);
           break
         } catch (error) {
-          console.log(`sudo snap install microk8s failed, retrying... attempt ${tryCount}/5 `, error);
-          //await new Promise(r => setTimeout(r, 10000)); // 10 seconds
+          setTimeout(function () {
+            console.log(`sudo snap install microk8s failed, retrying... attempt ${tryCount}/5 `, error);;
+          }, (10 * 1000));
+
         }
 
       this.prepareUserEnvironment();
