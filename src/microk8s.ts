@@ -102,7 +102,8 @@ export class MicroK8s {
       while (tryCount <= 5)
         try {
           ++tryCount;
-          util.executeCommand(false, this.command);
+          let ret = util.executeCommand(false, this.command);
+          console.log(ret)
           break
         } catch (error) {
           setTimeout(function () {
