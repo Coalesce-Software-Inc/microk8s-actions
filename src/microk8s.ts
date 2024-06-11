@@ -103,7 +103,6 @@ export class MicroK8s {
         try {
           ++tryCount;
           let ret = util.executeCommand(false, this.command);
-          console.log(`output: ${ret}`)
           break
         } catch (error) {
           console.log(`sudo snap install microk8s failed, retrying... attempt ${tryCount}/5`, error)
