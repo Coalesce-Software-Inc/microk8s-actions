@@ -99,16 +99,17 @@ export class MicroK8s {
       this.generateMicrok8sInstallCommand();
 
       let tryCount = 0;
-      while (tryCount <= 5)
+      while (tryCount < 5)
         try {
           ++tryCount;
           let ret = util.executeCommand(false, this.command);
           console.log(`output: ${ret}`)
           break
         } catch (error) {
-          setTimeout(function () {
-            console.log(`sudo snap install microk8s failed, retrying... attempt ${tryCount}/5 `, error);;
-          }, (10 * 1000));
+          console.log(`sudo snap install microk8s failed, retrying... attempt ${tryCount}/5`, error)
+          // setTimeout(function () {
+          //   console.log(`sudo snap install microk8s failed, retrying... attempt ${tryCount}/5`, error);;
+          // }, (10 * 1000));
         }
 
       this.prepareUserEnvironment();
