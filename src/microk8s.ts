@@ -103,7 +103,7 @@ export class MicroK8s {
         try {
           ++tryCount;
           let ret = util.executeCommand(false, this.command);
-          console.log(ret)
+          console.log(`output: ${ret}`)
           break
         } catch (error) {
           setTimeout(function () {
