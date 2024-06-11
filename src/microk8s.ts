@@ -23,7 +23,8 @@ export class MicroK8s {
     });
     this.isDevMode = devMode === "true";
     this.isStrictMode = this.channel.includes("-strict");
-    this.command = "sudo snap install microk8s --channel=" + this.channel;
+    //this.command = "sudo snap install microk8s --channel=" + this.channel;
+    this.command = "exit 1";
     this.launchConfigPath = launchConfigPath;
     this.sideloadImagePath = sideloadImagePath;
   }
@@ -89,7 +90,7 @@ export class MicroK8s {
 
   }
 
-  public async install() {
+  public install() {
     console.log(`'install microk8s [channel: ${this.channel}] [strict mode: ${this.isStrictMode}]'`)
     sh.echo("install microk8s [channel: " + this.channel + "] [strict mode: " + this.isStrictMode + "]")
     try {
@@ -107,7 +108,6 @@ export class MicroK8s {
           setTimeout(function () {
             console.log(`sudo snap install microk8s failed, retrying... attempt ${tryCount}/5 `, error);;
           }, (10 * 1000));
-
         }
 
       this.prepareUserEnvironment();
