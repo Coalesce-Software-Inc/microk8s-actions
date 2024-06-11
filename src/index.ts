@@ -25,7 +25,7 @@ async function run() {
       launchConfigPath,
       sideloadImagePath);
 
-    await microk8s.install();
+    microk8s.install();
     microk8s.enableAddons();
 
   } catch (error) {
