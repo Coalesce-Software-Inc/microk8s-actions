@@ -1,9 +1,9 @@
 name: Test Microk8s
-on: [push]
+on: [ push ]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: A job to install MicroK8s
     steps:
     - uses: Coalesce-Software-Inc/microk8s-actions@master
