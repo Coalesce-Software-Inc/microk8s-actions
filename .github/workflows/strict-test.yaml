@@ -1,12 +1,12 @@
 name: Strict confinement test Microk8s
-on: [push]
+on: [ push ]
 
 jobs:
   test:
     # strategy:
     #   matrix:
     #     version: ["1.25-strict/stable", "1.26-strict/stable", "1.27-strict/stable"]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     name: A job to install MicroK8s with strict confinement
     steps:
     - uses: Coalesce-Software-Inc/microk8s-actions@master
