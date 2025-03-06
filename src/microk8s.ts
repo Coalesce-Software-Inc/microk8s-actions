@@ -1,8 +1,8 @@
 import { Addon } from "./addon";
-import * as sh from 'shelljs';
-import * as util from './util';
-import * as core from '@actions/core';
-import * as status from './status';
+import * as sh from "shelljs";
+import * as util from "./util";
+import * as core from "@actions/core";
+import * as status from "./status";
 
 export class MicroK8s {
   channel: string;
@@ -13,8 +13,13 @@ export class MicroK8s {
   launchConfigPath: string;
   sideloadImagePath: string;
 
-
-  constructor(channel: string, addons: string[], devMode: string, launchConfigPath: string, sideloadImagePath: string) {
+  constructor(
+    channel: string,
+    addons: string[],
+    devMode: string,
+    launchConfigPath: string,
+    sideloadImagePath: string
+  ) {
     this.channel = channel;
     this.addons = new Array(addons.length);
     addons.forEach((addonString) => {
@@ -30,42 +35,63 @@ export class MicroK8s {
 
   private generateMicrok8sInstallCommand() {
     if (this.isStrictMode) {
-      this.command = this.command + " --devmode "
+      this.command = this.command + " --devmode ";
     } else {
-      this.command = this.command + " --classic "
+      this.command = this.command + " --classic ";
     }
   }
 
   private prepareUserEnvironment() {
     // Create microk8s group
+    sh.echo(new Date().toISOString());
     sh.echo("creating microk8s group.");
     if (!this.isStrictMode) {
       util.executeCommand(false, "sudo usermod -a -G microk8s $USER");
     } else {
       util.executeCommand(false, "sudo usermod -a -G snap_microk8s $USER");
     }
+    sh.echo(new Date().toISOString());
     sh.echo("creating default kubeconfig location.");
     util.executeCommand(false, "mkdir -p $HOME/.kube/");
+    sh.echo(new Date().toISOString());
     sh.echo("Generating kubeconfig file to default location.");
-    util.executeCommand(false, "sudo microk8s kubectl config view --raw > $HOME/.kube/config")
+    util.executeCommand(
+      false,
+      "sudo microk8s kubectl config view --raw > $HOME/.kube/config"
+    );
+    sh.echo(new Date().toISOString());
     sh.echo("Change default location ownership.");
-    util.executeCommand(false, "sudo chown -f -R $USER $HOME/.kube/")
-    util.executeCommand(false, "sudo chmod go-rx $HOME/.kube/config")
-
-
+    util.executeCommand(false, "sudo chown -f -R $USER $HOME/.kube/");
+    util.executeCommand(false, "sudo chmod go-rx $HOME/.kube/config");
   }
 
   private setupLaunchConfiguration() {
     if (this.launchConfigPath !== "") {
       util.executeCommand(false, "sudo mkdir -p /var/snap/microk8s/common/");
-      util.executeCommand(false, "sudo cp " + this.launchConfigPath + " " + "/var/snap/microk8s/common/.microk8s.yaml");
+      util.executeCommand(
+        false,
+        "sudo cp " +
+          this.launchConfigPath +
+          " " +
+          "/var/snap/microk8s/common/.microk8s.yaml"
+      );
     }
   }
 
   private sideloadImages() {
     if (this.sideloadImagePath !== "") {
-      util.executeCommand(false, "sudo mkdir -p /var/snap/microk8s/common/sideload");
-      util.executeCommand(false, "sudo cp " + this.sideloadImagePath + "/*.tar" + " " + "/var/snap/microk8s/common/sideload/");
+      util.executeCommand(
+        false,
+        "sudo mkdir -p /var/snap/microk8s/common/sideload"
+      );
+      util.executeCommand(
+        false,
+        "sudo cp " +
+          this.sideloadImagePath +
+          "/*.tar" +
+          " " +
+          "/var/snap/microk8s/common/sideload/"
+      );
     }
   }
 
@@ -73,7 +99,7 @@ export class MicroK8s {
     if (error instanceof Error) {
       core.setFailed(error.message);
     } else {
-      console.log('Unexpected error', error);
+      console.log("Unexpected error", error);
     }
   }
 
@@ -83,15 +109,23 @@ export class MicroK8s {
     let elapsed = Date.now();
 
     if (endTimeInMillis > elapsed) {
-      await util.delay(endTimeInMillis - elapsed)
-      status.waitForReadyState()
+      await util.delay(endTimeInMillis - elapsed);
+      status.waitForReadyState();
     }
-
   }
 
   public async install() {
-    console.log(`'install microk8s [channel: ${this.channel}] [strict mode: ${this.isStrictMode}]'`)
-    sh.echo("install microk8s [channel: " + this.channel + "] [strict mode: " + this.isStrictMode + "]")
+    console.log(
+      `'install microk8s [channel: ${this.channel}] [strict mode: ${this.isStrictMode}]'`
+    );
+    sh.echo(new Date().toISOString());
+    sh.echo(
+      "install microk8s [channel: " +
+        this.channel +
+        "] [strict mode: " +
+        this.isStrictMode +
+        "]"
+    );
     try {
       this.setupLaunchConfiguration();
       this.sideloadImages();
@@ -102,10 +136,13 @@ export class MicroK8s {
         try {
           ++tryCount;
           util.executeCommand(false, this.command);
-          break
+          break;
         } catch (error) {
-          console.log(`sudo snap install microk8s failed, retrying... attempt ${tryCount}/5`, error)
-          await new Promise(r => setTimeout(r, 30000)); // sleep 30 seconds between attempts
+          console.log(
+            `sudo snap install microk8s failed, retrying... attempt ${tryCount}/5`,
+            error
+          );
+          await new Promise((r) => setTimeout(r, 30000)); // sleep 30 seconds between attempts
         }
 
       this.prepareUserEnvironment();
@@ -120,5 +157,4 @@ export class MicroK8s {
       addon.enable();
     });
   }
-
 }
