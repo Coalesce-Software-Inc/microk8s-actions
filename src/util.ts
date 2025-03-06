@@ -1,9 +1,10 @@
-import * as sh from 'shelljs';
+import * as sh from "shelljs";
 
 export function executeCommand(isSilent: boolean, command: string) {
-    return sh.exec(command, { silent: isSilent }).code;
+  const result = sh.exec(command, { silent: isSilent, async: true });
+  return result.exitCode;
 }
 
 export function delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
